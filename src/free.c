@@ -51,7 +51,6 @@ void		free(void* pa)
 	pb = (t_hdr*)pa - 1;
 	pb->s.free = true;
 	p = select_current_zone((pb->s.size - 1) * sizeof(t_hdr));
-	ft_printf("free = %p, type = %d, zone = %p \n", pb, g_alloc.cur->type, g_alloc.cur->zone);
 	if (!is_block(pb))
 		return ;
 	if (g_alloc.cur->type == LARGE)
