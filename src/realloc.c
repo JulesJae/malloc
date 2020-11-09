@@ -6,14 +6,17 @@ static void		*cp_data(t_hdr *pb, void *ptr, size_t size)
 	void	*ret;
 
 	size_i = (pb->s.size - 1) * sizeof(t_hdr);
-	free(ptr);
-	show_alloc_mem();
+	if (size < SMALL)
+		free(ptr);
 	ret = malloc(size);
-	show_alloc_mem();
 	if (ret == NULL)
 		return NULL;
-	ft_printf("cp_data ret = %p, sizw = %d, sizedispo = %d\n", ret, size, ((t_hdr*)ret - 1)->s.size * sizeof(t_hdr));
-	ft_memcpy(ret, ptr, size_i);
+	if (size > SMALL)
+	{
+		ft_memcpy(ret, ptr, pb->s.size);
+		free(ptr);
+	} else
+		ft_memcpy(ret, ptr, size_i);
 	return ret;
 }
 
@@ -23,9 +26,11 @@ void			*realloc(void* ptr, size_t size)
 
 	if (!ptr)
 		return malloc(size);
-	pb = ((t_hdr*)ptr - 1);
-	ft_printf("ptr = %p, size = %d, size dispo = %d\n", ptr, size, (pb->s.size - 1) * sizeof(t_hdr));
-	if (size <= (pb->s.size - 1) * sizeof(t_hdr))
+	pb = (t_hdr*)ptr - 1;
+	select_current_zone((pb->s.size - 1) * sizeof(t_hdr));
+	if (!is_block(pb))
+		return NULL;
+	if (size <= (pb->s.size - 1) * sizeof(t_hdr) && size <= SMALL)
 		return ptr;
 	return cp_data(pb, ptr, size);
 }

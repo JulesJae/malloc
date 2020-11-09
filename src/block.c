@@ -18,3 +18,23 @@ t_hdr			*create_block(size_t size, bool large)
 	pb->s.next = pb;
 	return pb;
 }
+
+bool			is_block(t_hdr *pb)
+{
+	t_hdr	*p;
+
+	p = g_alloc.cur->zone;
+	if (p != NULL)
+	{
+		if (p == pb)
+			return true;
+		p = p->s.next;
+		while (p != g_alloc.cur->zone)
+		{
+			if (p == pb)
+				return true;
+			p = p->s.next;
+		}
+	}
+	return false;
+}

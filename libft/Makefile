@@ -58,7 +58,7 @@ HEADER = ./includes
 
 CC = gcc $(CFLAGS)
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -fPIC
 
 SRCS = $(addprefix $(D_SRCS)/,$(SC))
 

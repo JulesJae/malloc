@@ -36,6 +36,8 @@ void		free_large(t_hdr *large, t_hdr *p)
 		g_alloc.cur->zone = NULL;
 	else if (large == g_alloc.cur->zone)
 		g_alloc.cur->zone = p->s.next;
+	g_alloc.bytes -= large->s.size;
+	g_alloc.cur->size -= large->s.size;
 	munmap(large, large->s.size);
 	if (g_alloc.debug)
 		printf_free_large(large);
@@ -48,7 +50,10 @@ void		free(void* pa)
 
 	pb = (t_hdr*)pa - 1;
 	pb->s.free = true;
-	p = select_current_zone(pb->s.size * sizeof(t_hdr));
+	p = select_current_zone((pb->s.size - 1) * sizeof(t_hdr));
+	ft_printf("free = %p, type = %d, zone = %p \n", pb, g_alloc.cur->type, g_alloc.cur->zone);
+	if (!is_block(pb))
+		return ;
 	if (g_alloc.cur->type == LARGE)
 	{
 		free_large(pb, p);

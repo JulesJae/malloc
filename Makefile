@@ -4,7 +4,7 @@ endif
 
 NAME = libft_malloc_$(HOSTTYPE).so
 
-CC = gcc $(FLAGS) $(INCLUDES)
+CC = gcc $(FLAGS)
 
 LINK = libft_malloc.so
 
@@ -16,7 +16,7 @@ INCLUDES = -I ./includes -I ./libft/includes
 
 PATH_SRC = ./src/
 
-FLAGS = -Wall -Wextra -Werror $(INCLUDES) -g
+FLAGS = -Wall -Wextra -Werror $(INCLUDES) -g -fPIC
 
 SRC =	block.c \
 		free.c \
@@ -29,11 +29,11 @@ OBJ = $(addprefix $(PATH_SRC), $(SRC:.c=.o))
 
 all: $(LIB) $(NAME)
 $(LIB): 
-	Make -c $(LIBFT)
+	make -C $(LIBFT)
 
 $(NAME): $(OBJ)
 	@rm -f $(LINK)
-	$(CC) $(FLAGS) -shared -o $(NAME) $(OBJ) $(LIB)
+	$(CC) -shared -o $(NAME) $(OBJ) $(LIB)
 	@ln -s $(NAME) $(LINK)
 
 clean: 

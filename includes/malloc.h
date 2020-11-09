@@ -53,6 +53,7 @@ void					printf_free_large(void *p);
 void					swap_next(t_hdr *pprec, t_hdr *p);
 void					add_to_zone(t_hdr *pb);
 t_hdr					*create_block(size_t size, bool large);
+bool					is_block(t_hdr *pb);
 void					*malloc(size_t size);
 void					*realloc(void* ptr, size_t size);
 void					free(void* pa);

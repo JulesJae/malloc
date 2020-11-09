@@ -36,6 +36,7 @@ static int	show_alloc(t_zinfos *z)
 			return bytes;
 	}
 }
+
 void		print_debug(char *type, void *p)
 {
 	ft_printf("\n--- %s at %p ---\n\n", type, p);
@@ -49,11 +50,11 @@ void		printf_free_large(void *p)
 	ft_printf("----------------------\n\n");
 }
 
-
 void		show_alloc_mem()
 {
 	int		bytes;
 
+	bytes = 0;
 	if (g_alloc.tiny.zone)
 		bytes = show_alloc(&g_alloc.tiny);
 	if (g_alloc.small.zone)
@@ -61,6 +62,8 @@ void		show_alloc_mem()
 	if (g_alloc.large.zone)
 		bytes += show_alloc(&g_alloc.large);
 	ft_printf(
-		"mem alloc/free/total:\n\t{red}%ld{eoc}/{cyan}%ld{eoc}/{green}%ld{eoc} bytes\n"
+		"mem alloc/free/total:\n\t{red}%ld{eoc}/"
+		"{cyan}%ld{eoc}/{green}%ld{eoc} bytes\n"
 	, bytes, g_alloc.bytes - bytes, g_alloc.bytes);
+	ft_printf("pages: %ld\n", g_alloc.bytes / getpagesize());
 }
