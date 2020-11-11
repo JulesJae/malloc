@@ -76,12 +76,15 @@ void			*malloc(size_t size)
 	pthread_mutex_lock(&g_alloc.memory_mutex);
 	pprec = select_current_zone(size);
 	if (size > SMALL)
-		return create_large_block(size);
-	if (pprec == NULL)
-		pprec = create_and_add_zone(true);
-	size = (size + sizeof(t_hdr) - 1) / sizeof(t_hdr) + 1;
-	p = pprec->s.next;
-	ret = find_available_bloc(pprec, p, size);
+		ret = create_large_block(size);
+	else 
+	{
+		if (pprec == NULL)
+			pprec = create_and_add_zone(true);
+		size = (size + sizeof(t_hdr) - 1) / sizeof(t_hdr) + 1;
+		p = pprec->s.next;
+		ret = find_available_bloc(pprec, p, size);
+	}
 	pthread_mutex_unlock(&g_alloc.memory_mutex);
 	return ret;
 }

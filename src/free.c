@@ -50,15 +50,16 @@ void		free(void* pa)
 
 	if (!pa)
 		return ;
-	pthread_mutex_lock(&g_alloc.memory_mutex);
 	pb = (t_hdr*)pa - 1;
 	pb->s.free = true;
 	p = select_current_zone((pb->s.size - 1) * sizeof(t_hdr));
 	if (!is_block(pb))
 		return ;
+	pthread_mutex_lock(&g_alloc.memory_mutex);
 	if (g_alloc.cur->type == LARGE)
 	{
 		free_large(pb, p);
+		pthread_mutex_unlock(&g_alloc.memory_mutex);
 		return ;
 	}
 	p = find_previous(p, pb);
