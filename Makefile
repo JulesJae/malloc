@@ -33,7 +33,7 @@ $(LIB):
 
 $(NAME): $(OBJ)
 	@rm -f $(LINK)
-	$(CC) -shared -o $(NAME) $(OBJ) $(LIB)
+	$(CC) -shared -o $(NAME) $(OBJ) $(LIB) -lpthread
 	@ln -s $(NAME) $(LINK)
 
 clean: 

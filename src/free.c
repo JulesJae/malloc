@@ -48,6 +48,9 @@ void		free(void* pa)
 	t_hdr	*pb;
 	t_hdr	*p;
 
+	if (!pa)
+		return ;
+	pthread_mutex_lock(&g_alloc.memory_mutex);
 	pb = (t_hdr*)pa - 1;
 	pb->s.free = true;
 	p = select_current_zone((pb->s.size - 1) * sizeof(t_hdr));
@@ -58,16 +61,9 @@ void		free(void* pa)
 		free_large(pb, p);
 		return ;
 	}
-	while (p->s.next != pb)
-	{
-		if (p->s.next == g_alloc.cur->zone)
-		{
-			swap_next(p, pb);
-			return ;
-		}
-		p = p->s.next;
-	}
+	p = find_previous(p, pb);
 	defragment(pb, p);
 	if (g_alloc.debug)
 		print_debug("free", pa);
+	pthread_mutex_unlock(&g_alloc.memory_mutex);
 }

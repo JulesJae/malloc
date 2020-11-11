@@ -55,6 +55,7 @@ void		show_alloc_mem()
 	int		bytes;
 
 	bytes = 0;
+	pthread_mutex_lock(&g_alloc.memory_mutex);
 	if (g_alloc.tiny.zone)
 		bytes = show_alloc(&g_alloc.tiny);
 	if (g_alloc.small.zone)
@@ -66,4 +67,5 @@ void		show_alloc_mem()
 		"{cyan}%ld{eoc}/{green}%ld{eoc} bytes\n"
 	, bytes, g_alloc.bytes - bytes, g_alloc.bytes);
 	ft_printf("pages: %ld\n", g_alloc.bytes / getpagesize());
+	pthread_mutex_unlock(&g_alloc.memory_mutex);
 }

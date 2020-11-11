@@ -5,8 +5,8 @@
 # include <sys/mman.h>
 # include <stdbool.h>
 # include <unistd.h>
+#include <pthread.h>
 # include "../libft/includes/ft_printf.h"
-// # include <stdlib.h>
 
 # define N_ALLOCS 100
 
@@ -40,6 +40,7 @@ typedef struct			s_alloc
 	t_zinfos			*cur;
 	int					debug;
 	long				bytes;
+	pthread_mutex_t		memory_mutex;
 }						t_alloc;
 
 t_alloc					g_alloc;
@@ -53,6 +54,7 @@ void					printf_free_large(void *p);
 void					swap_next(t_hdr *pprec, t_hdr *p);
 void					add_to_zone(t_hdr *pb);
 t_hdr					*create_block(size_t size, bool large);
+t_hdr					*find_previous(t_hdr *p, t_hdr *next);
 bool					is_block(t_hdr *pb);
 void					*malloc(size_t size);
 void					*realloc(void* ptr, size_t size);

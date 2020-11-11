@@ -16,6 +16,7 @@ void		initialize_g()
 	g_alloc.bytes = 0;
 	debug = getenv("MallocDebug");
 	g_alloc.debug = debug ? ft_atoi(debug) : 0;
+	pthread_mutex_init(&g_alloc.memory_mutex, NULL);
 }
 
 t_hdr		*select_current_zone(size_t size)

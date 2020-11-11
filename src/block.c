@@ -19,6 +19,13 @@ t_hdr			*create_block(size_t size, bool large)
 	return pb;
 }
 
+t_hdr			*find_previous(t_hdr *p, t_hdr *next)
+{
+	while (p->s.next != next)
+		p = p->s.next;
+	return p;
+}
+
 bool			is_block(t_hdr *pb)
 {
 	t_hdr	*p;
