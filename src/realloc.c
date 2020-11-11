@@ -14,7 +14,7 @@ static void		*cp_data(t_hdr *pb, void *ptr, size_t size)
 	pthread_mutex_lock(&g_alloc.memory_mutex);
 	if (size > SMALL)
 	{
-		ft_memcpy(ret, ptr, pb->s.size);
+		ft_memcpy(ret, ptr, pb->s.size - sizeof(t_hdr));
 		pthread_mutex_unlock(&g_alloc.memory_mutex);
 		free(ptr);
 	} else
